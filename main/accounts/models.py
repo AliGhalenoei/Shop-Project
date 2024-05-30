@@ -43,3 +43,18 @@ class User(AbstractBaseUser , PermissionsMixin):
     def is_staff(self):
         return self.is_admin
 
+
+class OTP(models.Model):
+    phone = models.CharField(max_length=11 , verbose_name ="تلفن")
+    code = models.SmallIntegerField(verbose_name ="کد ( یک کد چهار رقمی است که به تلفن کاربر ارسال می‌شود , در مرحله رجیستر کردن )")
+
+    created =models.DateTimeField(auto_now_add=True)
+    updated =models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "کد"
+        verbose_name_plural = "کد های پیامکی"
+
+
+    def __str__(self) -> str:
+        return f'{self.phone} Code Veryfy : {self.code}'
