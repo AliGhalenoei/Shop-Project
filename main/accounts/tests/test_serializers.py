@@ -1,40 +1,8 @@
 from django.test import TestCase
 
 from accounts.models import User
-from accounts.serializers import (
-    UserAuthenticationSerializer,
-    UserRegisterSerializer
-)
+from accounts.serializers import UserRegisterSerializer
 
-
-
-class TestUserAuthenticationSerializer(TestCase):
-
-    serializer_class = UserAuthenticationSerializer
-
-    def setUp(self) -> None:
-        User.objects.create_user(
-            phone = '09999999999',
-            username = 'Test',
-            password = 'Test1234'
-        )
-
-    def test_valid_data(self):
-        serializer = self.serializer_class(data = {
-            'phone':'09234325671'
-        })
-        self.assertTrue(serializer.is_valid())
-
-    def test_empty_valid_data(self):
-        serializer = self.serializer_class(data = {})
-        self.assertFalse(serializer.is_valid())
-
-    def test_exist_phone(self):
-        serializer = self.serializer_class(data = {
-            'phone':'09999999999'
-        })
-        self.assertFalse(serializer.is_valid())  
-        self.assertEqual(len(serializer.errors), 1) 
 
 
 
@@ -51,6 +19,7 @@ class TestUserRegisterSerializer(TestCase):
 
     def test_valid_data(self):
         serializer = self.serializer_class(data = {
+            'phone':'09999945631',
             'username':'Ali',
             'password':'Ali1234',
             'password2':'Ali1234'
@@ -63,6 +32,7 @@ class TestUserRegisterSerializer(TestCase):
 
     def test_exist_username(self):
         serializer = self.serializer_class(data = {
+            'phone':'09999945634',
             'username':'Test',
             'password':'1234',
             'password2':'1234'

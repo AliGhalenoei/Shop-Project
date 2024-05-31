@@ -37,24 +37,17 @@ class UserLogoutSerializer(serializers.Serializer):
             raise serializers.ValidationError('Bad Tokens...')
 
 
-class UserAuthenticationSerializer(serializers.Serializer):
+class UserRegisterSerializer(serializers.Serializer):
     phone = serializers.CharField()
+    username = serializers.CharField()
+    password = serializers.CharField()
+    password2 = serializers.CharField()
 
     def validate_phone(self , value):
         if User.objects.filter(phone = value).exists():
             raise serializers.ValidationError('Phone is already exist!!!')
         return value
-
-
-class VeryfyOtpSerializer(serializers.Serializer):
-    code = serializers.IntegerField()
-
-
-class UserRegisterSerializer(serializers.Serializer):
-    username = serializers.CharField()
-    password = serializers.CharField()
-    password2 = serializers.CharField()
-
+    
     def validate_username(self , value):
         if User.objects.filter(username = value).exists():
             raise serializers.ValidationError('Username is already exist!!!')
@@ -64,3 +57,5 @@ class UserRegisterSerializer(serializers.Serializer):
         if value['password'] and value['password2'] and value['password'] != value['password2']:
             raise serializers.ValidationError('Passwords is not Match')
         return value
+
+

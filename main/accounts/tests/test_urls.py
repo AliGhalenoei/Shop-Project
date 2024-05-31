@@ -13,14 +13,6 @@ class TestUrls(SimpleTestCase):
         url = reverse('logout')
         self.assertEqual(resolve(url).func.view_class,views.UserLogoutAPIView)
 
-    def test_authentication_url(self):
-        url = reverse('authentication')
-        self.assertEqual(resolve(url).func.view_class,views.UserAuthenticationAPIView)
-
-    def test_veryfy_url(self):
-        url = reverse('veryfy')
-        self.assertEqual(resolve(url).func.view_class,views.VeryfyOtpAPIView)
-
     def test_register_url(self):
         url = reverse('register')
         self.assertEqual(resolve(url).func.view_class,views.UserRegisterAPIView)
