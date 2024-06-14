@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     #Project Apps
     'accounts.apps.AccountsConfig',
+    'content.apps.ContentConfig',
 
     # Include Apps
     'storages',
