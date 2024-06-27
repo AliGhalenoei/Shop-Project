@@ -20,7 +20,8 @@ class CategorysAPIView(APIView):
     def get(self , request):
         queryset = Category.objects.all()
         serializer = self.serializer_class(instance = queryset , many = True)
-        return Response(data = serializer.data , status=status.HTTP_200_OK)
+        return Response(data = serializer.data , status=status.HTTP_200_OK , )
+    
     
 class ProductsAPIView(APIView):
 
@@ -55,15 +56,40 @@ class RetrieveProductAPIView(APIView):
 class FilterProductAPIView(APIView):
 
     """
-    
+        API view for filtering products based on a specific category.
     """
 
     permission_classes = [AllowAny]
     serializer_class = ProductsSerializer
 
-    def get(self , request , slug_category):
-        category = Category.objects.get(slug = slug_category)
-        products = Product.objects.filter(category = category)
-        serializer = self.serializer_class(instance = products , many=True)
+    def setup(self, request, *args, **kwargs) :
+        self.category_instance = Category.objects.get(slug = kwargs['slug_category'])
+        self.product_instance = Product.objects.filter(category = self.category_instance)
+        return super().setup(request, *args, **kwargs)
 
+    def get(self , request , *args , **kwargs):
+        products = self.product_instance
+        serializer = self.serializer_class(instance = products , many=True)
         return Response(data = serializer.data , status = status.HTTP_200_OK)
+    
+
+class RelatedProductAPIView(APIView):
+    
+    """
+        In this view:
+        the product slug is taken and suggests 8 products similar to the user's taste.
+    """
+
+    permission_classes = [AllowAny]
+    serializer_class = ProductsSerializer
+
+    def setup(self, request, *args, **kwargs) :
+        self.product_instance = Product.objects.get(slug = kwargs['slug_product'])
+        return super().setup(request, *args, **kwargs)
+
+    def get(self , request , *args , **kwargs):
+        product = self.product_instance
+        object_list = Product.objects.filter(category = product.category.first())[:8]
+        serializer = self.serializer_class(instance = object_list , many = True)
+        return Response(data = serializer.data , status = status.HTTP_200_OK)
+
