@@ -13,7 +13,8 @@ class CategorysSerializer(serializers.ModelSerializer):
 
 
 class ProductsSerializer(serializers.ModelSerializer):
-    category = serializers.StringRelatedField(many=True)
+    category = serializers.StringRelatedField(read_only =True)
+    sub_category = serializers.StringRelatedField(read_only =True)
     galerys = serializers.SerializerMethodField()
 
     class Meta:

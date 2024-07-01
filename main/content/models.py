@@ -3,19 +3,26 @@ from django.db import models
 # Create your models here.
 
 
+class SubCategory(models.Model):
+    title = models.CharField(max_length=255)
+    baner= models.ImageField(upload_to='baner_sub_category',null=True,blank=True)
+
+    slug = models.SlugField(unique=True,max_length=50)
+    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return self.title
+    
+    class Meta:
+        verbose_name = "زیر دسته بندی"
+        verbose_name_plural = "زیر دسته بندی ها"
+
+
 class Category(models.Model):
     title = models.CharField(max_length=255 , null=True , blank=True)
     baner= models.ImageField(upload_to='baner_category',null=True,blank=True)
     
-    sub = models.ForeignKey(
-        'self',
-        on_delete=models.CASCADE,
-        related_name='sub_category',
-        null=True,
-        blank=True
-    )
-    is_sub = models.BooleanField(default=False)
-
     slug = models.SlugField(unique=True,max_length=50)
     created = models.DateTimeField(auto_now_add=True)
     created = models.DateTimeField(auto_now=True)
@@ -31,7 +38,8 @@ class Category(models.Model):
 
 class Product(models.Model):
     title = models.CharField(max_length = 255)
-    category = models.ManyToManyField(Category,related_name='product_category')
+    category = models.ForeignKey(Category,on_delete=models.CASCADE,related_name='product_category',null=True , blank=True)
+    sub_category= models.ForeignKey(SubCategory,on_delete=models.CASCADE,related_name='sub_category',null=True , blank=True)
     body = models.TextField()
     baner = models.ImageField(upload_to='baner_products/')
     price = models.IntegerField()
