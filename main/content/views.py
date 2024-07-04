@@ -21,6 +21,21 @@ class CategorysAPIView(APIView):
         queryset = Category.objects.all()
         serializer = self.serializer_class(instance = queryset , many = True)
         return Response(data = serializer.data , status=status.HTTP_200_OK , )
+
+
+class SubCategorysAPIView(APIView):
+
+    """
+        get all sub categorys
+    """
+
+    permission_classes = [AllowAny]
+    serializer_class = SubCategorysSerializer
+
+    def get(self , request):
+        queryset = SubCategory.objects.all()
+        serializer = self.serializer_class(instance = queryset , many = True)
+        return Response(data = serializer.data , status=status.HTTP_200_OK , )
     
     
 class ProductsAPIView(APIView):
@@ -53,10 +68,10 @@ class RetrieveProductAPIView(APIView):
         return Response(data = serializer.data , status=status.HTTP_200_OK)
     
 
-class FilterProductAPIView(APIView):
+class FilterProductsByCategoryAPIView(APIView):
 
     """
-        API view for filtering products based on a specific category.
+        API view for filtering by sub_category.
     """
 
     permission_classes = [AllowAny]
@@ -72,6 +87,26 @@ class FilterProductAPIView(APIView):
         serializer = self.serializer_class(instance = products , many=True)
         return Response(data = serializer.data , status = status.HTTP_200_OK)
     
+
+class FilterProductsBySubCategoryAPIView(APIView):
+
+    """
+        API view for filtering products by sub_category.
+    """
+
+    permission_classes = [AllowAny]
+    serializer_class = ProductsSerializer
+
+    def setup(self, request, *args, **kwargs) :
+        self.subcategory_instance = SubCategory.objects.get(slug = kwargs['slug_subcategory'])
+        self.product_instance = Product.objects.filter(sub_category = self.subcategory_instance)
+        return super().setup(request, *args, **kwargs)
+
+    def get(self , request , *args , **kwargs):
+        products = self.product_instance
+        serializer = self.serializer_class(instance = products , many=True)
+        return Response(data = serializer.data , status = status.HTTP_200_OK)
+
 
 class RelatedProductAPIView(APIView):
     

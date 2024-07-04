@@ -12,6 +12,13 @@ class CategorysSerializer(serializers.ModelSerializer):
         fields = ('__all__')
 
 
+class SubCategorysSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = SubCategory
+        fields = ('__all__')
+
+
 class ProductsSerializer(serializers.ModelSerializer):
     category = serializers.StringRelatedField(read_only =True)
     sub_category = serializers.StringRelatedField(read_only =True)
