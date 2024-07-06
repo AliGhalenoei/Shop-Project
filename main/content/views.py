@@ -53,6 +53,21 @@ class ProductsAPIView(APIView):
         return Response(data = serializer.data , status=status.HTTP_200_OK)
     
 
+class OfferProductsAPIView(APIView):
+
+    """
+        get offer Products
+    """
+
+    permission_classes = [AllowAny]
+    serializer_class = ProductsSerializer
+
+    def get(self , request):
+        queryset = Product.objects.filter(status = 'off')
+        serializer = self.serializer_class(instance = queryset , many = True)
+        return Response(data = serializer.data , status=status.HTTP_200_OK)
+    
+
 class RetrieveProductAPIView(APIView):
 
     """

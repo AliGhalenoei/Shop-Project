@@ -37,12 +37,19 @@ class Category(models.Model):
 
 
 class Product(models.Model):
+
+    STATUS_PRODUCT = (
+        ('off','تخفیف'),
+        ('definite','مقطوع')
+    )
+
     title = models.CharField(max_length = 255)
     category = models.ForeignKey(Category,on_delete=models.CASCADE,related_name='product_category',null=True , blank=True)
     sub_category= models.ForeignKey(SubCategory,on_delete=models.CASCADE,related_name='sub_category',null=True , blank=True)
     body = models.TextField()
     baner = models.ImageField(upload_to='baner_products/')
     price = models.IntegerField()
+    status = models.CharField(max_length=12 , choices=STATUS_PRODUCT , default='definite')
     is_avalable=models.BooleanField(default=True)
 
     slug = models.SlugField(max_length=50, unique=True)

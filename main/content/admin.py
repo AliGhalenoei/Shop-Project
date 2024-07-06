@@ -10,7 +10,7 @@ class GaleryInline(admin.TabularInline):
 @admin.register(Product)
 class ProdutAdmin(admin.ModelAdmin):
     inlines = [GaleryInline]
-    list_display = ['title','is_avalable']
+    list_display = ['title','status','is_avalable']
     prepopulated_fields = {'slug':('title',)}
 
 @admin.register(Category)

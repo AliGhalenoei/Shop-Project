@@ -8,6 +8,7 @@ urlpatterns = [
     
     # Products list and detail products
     path('products/',views.ProductsAPIView.as_view(),name = 'products'),
+    path('offer/products/',views.OfferProductsAPIView.as_view(),name = 'offer_products'),
     path('product/<slug:slug_product>/',views.RetrieveProductAPIView.as_view(),name = 'product'),
 
     # Filter products by category
