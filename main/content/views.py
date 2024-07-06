@@ -20,7 +20,7 @@ class CategorysAPIView(APIView):
     def get(self , request):
         queryset = Category.objects.all()
         serializer = self.serializer_class(instance = queryset , many = True)
-        return Response(data = serializer.data , status=status.HTTP_200_OK , )
+        return Response(data = serializer.data , status=status.HTTP_200_OK)
 
 
 class SubCategorysAPIView(APIView):
@@ -139,7 +139,7 @@ class RelatedProductAPIView(APIView):
 
     def get(self , request , *args , **kwargs):
         product = self.product_instance
-        object_list = Product.objects.filter(category = product.category.first())[:8]
+        object_list = Product.objects.filter(category = product.category)[:8]
         serializer = self.serializer_class(instance = object_list , many = True)
         return Response(data = serializer.data , status = status.HTTP_200_OK)
 

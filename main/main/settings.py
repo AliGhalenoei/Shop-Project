@@ -39,9 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    #Project Apps
+    # Project Apps
     'accounts.apps.AccountsConfig',
     'content.apps.ContentConfig',
+    'options.apps.OptionsConfig',
 
     # Include Apps
     'storages',
@@ -56,7 +57,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
 
-    # corsheaders
+    # corsheaders middleware
     "corsheaders.middleware.CorsMiddleware",
 
     'django.middleware.common.CommonMiddleware',
