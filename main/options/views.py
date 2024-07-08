@@ -12,7 +12,7 @@ from .models import *
 class StorysAPIView(APIView):
 
     """
-        get all storys
+        get all storys.
     """
 
     serializer_class = StorySerializer
