@@ -143,3 +143,39 @@ class RelatedProductAPIView(APIView):
         serializer = self.serializer_class(instance = object_list , many = True)
         return Response(data = serializer.data , status = status.HTTP_200_OK)
 
+# blogs and detail blogs
+class BlogsAPIView(APIView):
+
+    """
+        get all Blogs
+    """
+
+    permission_classes = [AllowAny]
+    serializer_class = BlogsSerializer
+
+    def setup(self, request, *args, **kwargs) :
+        self.blog_instance = Blog.objects.all()
+        return super().setup(request, *args, **kwargs)
+
+    def get(self , request , *args , **kwargs):
+        blogs = self.blog_instance
+        serializer = self.serializer_class(instance = blogs , many = True)
+        return Response(data = serializer.data , status = status.HTTP_200_OK)
+    
+class RetrieveBlogAPIView(APIView):
+
+    """
+        get retrieve Blogs
+    """
+
+    permission_classes = [AllowAny]
+    serializer_class = BlogsSerializer
+
+    def setup(self, request, *args, **kwargs) :
+        self.blog_instance = Blog.objects.get(slug = kwargs['slug_blog'])
+        return super().setup(request, *args, **kwargs)
+
+    def get(self , request , *args , **kwargs):
+        blog = self.blog_instance
+        serializer = self.serializer_class(instance = blog)
+        return Response(data = serializer.data , status = status.HTTP_200_OK)

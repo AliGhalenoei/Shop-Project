@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'content.apps.ContentConfig',
     'options.apps.OptionsConfig',
+    'panel.apps.PanelConfig',
 
     # Include Apps
     'storages',
@@ -158,6 +159,16 @@ REST_FRAMEWORK = {
 
     #drf_spectacular
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
+    
+    # 'DEFAULT_PARSER_CLASSES': [
+    #     'rest_framework.parsers.JSONParser',
+    # ]
+
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ]
     
 }
 

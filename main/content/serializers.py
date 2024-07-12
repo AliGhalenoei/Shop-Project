@@ -1,8 +1,9 @@
 from rest_framework import serializers
 
-# import all models app content
 from .models import *
 
+# import modules app options
+from options.models import Blog
 
 
 class CategorysSerializer(serializers.ModelSerializer):
@@ -40,7 +41,11 @@ class GaleryProductSerializer(serializers.ModelSerializer):
         fields = ('__all__')
 
 
+class BlogsSerializer(serializers.ModelSerializer):
 
+    class Meta:
+        model = Blog
+        fields = ('__all__')
 
     
 

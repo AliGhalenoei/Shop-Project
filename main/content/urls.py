@@ -15,6 +15,10 @@ urlpatterns = [
     path('products/filter/<slug:slug_category>/',views.FilterProductsByCategoryAPIView.as_view(),name = 'filter_products'),
     # Filter products by sub_category
     path('products/filter/subcategory/<slug:slug_subcategory>/',views.FilterProductsBySubCategoryAPIView.as_view(),name = 'filter_subcategory'),
-
+    # Related Products
     path('related/products/<slug:slug_product>/',views.RelatedProductAPIView.as_view(),name = 'related_products'),
+
+    # blogs
+    path('blogs/',views.BlogsAPIView.as_view(),name = 'blogs'),
+    path('blog/<slug:slug_blog>/',views.RetrieveBlogAPIView.as_view(),name ='blog'),
 ]

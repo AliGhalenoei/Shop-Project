@@ -24,6 +24,7 @@ urlpatterns = [
     path('accounts/',include('accounts.urls')),
     path('content/',include('content.urls')),
     path('options/',include('options.urls')),
+    path('panel/',include('panel.urls')),
     # Swagger...
     # YOUR PATTERNS
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),

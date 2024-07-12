@@ -10,15 +10,15 @@ class GaleryInline(admin.TabularInline):
 @admin.register(Product)
 class ProdutAdmin(admin.ModelAdmin):
     inlines = [GaleryInline]
-    list_display = ['title','status','is_avalable']
+    list_display = ['title','status','is_avalable' , 'id']
     prepopulated_fields = {'slug':('title',)}
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['title']
+    list_display = ['title','id']
     prepopulated_fields = {'slug':('title',)}
 
 @admin.register(SubCategory)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['title']
+class SubCategoryAdmin(admin.ModelAdmin):
+    list_display = ['title' , 'id']
     prepopulated_fields = {'slug':('title',)}
