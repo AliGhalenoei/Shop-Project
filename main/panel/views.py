@@ -315,3 +315,115 @@ class DeleteBlogAPIView(APIView):
         blog = self.blog_instance 
         blog.delete()
         return Response({'Message':'Blog Deleted...'},status=status.HTTP_200_OK)
+    
+# CRUD Tag Model
+
+class TagsAPIView(APIView):
+    """
+        get all Tags
+
+        Note:
+
+            The user must be logged in and is_admin must be active. 
+    """
+
+    serializer_class = TagSerializer
+    permission_classes = [IsAdmin]
+    
+    def setup(self, request, *args, **kwargs) :
+        self.tag_instance = Tag.objects.all()
+        return super().setup(request, *args, **kwargs)
+    
+    def get(self , request):
+        tags = self.tag_instance
+        serializer = self.serializer_class(instance = tags , many = True)
+        return Response(data = serializer.data , status=status.HTTP_200_OK)
+
+
+class CreateTagAPIView(APIView):
+
+    """
+        Create Tag
+        Note:
+
+            The user must be logged in and is_admin must be active.
+    """
+
+    serializer_class = TagSerializer
+    permission_classes = [IsAdmin]
+
+    def post(self , request):
+        serializer = self.serializer_class(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data = serializer.data ,status=status.HTTP_200_OK)
+        return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+    
+
+class RetrieveTagAPIView(APIView):
+
+    """
+        Retrieve tags
+        Note:
+
+            The user must be logged in and is_admin must be active.
+    """
+
+    serializer_class = TagSerializer
+    permission_classes = [IsAdmin]
+
+    def setup(self, request, *args, **kwargs) :
+        self.tag_instance = Tag.objects.get(id = kwargs['tag_id'])
+        return super().setup(request, *args, **kwargs)
+
+    def get(self , request , *args , **kwargs):
+        tag = self.tag_instance
+        serializer = self.serializer_class(instance = tag)
+        return Response(data = serializer.data , status=status.HTTP_200_OK)
+    
+
+class UpdateTagAPIView(APIView):
+
+    """
+        update Tags
+        Note:
+
+            The user must be logged in and is_admin must be active.
+    """
+
+    serializer_class = TagSerializer
+    permission_classes = [IsAdmin]
+
+    def setup(self, request, *args, **kwargs) :
+        self.tag_instance = Tag.objects.get(id = kwargs['tag_id'])
+        return super().setup(request, *args, **kwargs)
+    
+    def put(self , request , *args, **kwargs):
+        tag = self.tag_instance
+        serializer = self.serializer_class(instance = tag , data = request.data , partial = True)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data = serializer.data ,status=status.HTTP_200_OK)
+        return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+    
+
+class DeleteTagAPIView(APIView):
+
+    """
+        delete Tags
+        Note:
+
+            The user must be logged in and is_admin must be active.
+    """
+
+    permission_classes = [IsAdmin]
+
+    def setup(self, request, *args, **kwargs) :
+        self.tag_instance = Tag.objects.get(id = kwargs['tag_id'])
+        return super().setup(request, *args, **kwargs)
+    
+    def delete(self , request , *args , **kwargs):
+        tag = self.tag_instance 
+        tag.delete()
+        return Response({'Message':'Tag Deleted...'},status=status.HTTP_200_OK)

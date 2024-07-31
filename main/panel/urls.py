@@ -20,5 +20,10 @@ urlpatterns = [
     path('add/blog/',views.CreateBlogAPIView.as_view(),name='add_blog'),
     path('update/blog/<int:blog_id>/',views.UpdateBlogAPIView.as_view(),name='update_blog'),
     path('delete/blog/<int:blog_id>/',views.DeleteBlogAPIView.as_view(),name='delete_blog'),
-
+    # CRUD Tag Model
+    path('tags/',views.TagsAPIView.as_view(),name='tags'),
+    path('add/tag/',views.CreateTagAPIView.as_view(),name='add_tag'),
+    path('tag/<int:tag_id>/',views.RetrieveTagAPIView.as_view(),name='tag'),
+    path('update/tag/<int:tag_id>/',views.UpdateTagAPIView.as_view(),name='update_tag'),
+    path('delete/tag/<int:tag_id>/',views.DeleteTagAPIView.as_view(),name='delete_tag'),
 ]
