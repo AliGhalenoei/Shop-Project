@@ -5,6 +5,8 @@ from rest_framework.permissions import IsAuthenticated , AllowAny
 
 from .serializers import *
 from .models import *
+
+from options.models import CommentProduct
 # Create your views here.
 
 
@@ -142,6 +144,7 @@ class RelatedProductAPIView(APIView):
         object_list = Product.objects.filter(category = product.category)[:8]
         serializer = self.serializer_class(instance = object_list , many = True)
         return Response(data = serializer.data , status = status.HTTP_200_OK)
+
 
 # blogs and detail blogs
 class BlogsAPIView(APIView):

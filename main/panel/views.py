@@ -1,4 +1,6 @@
 from django.utils.text import slugify
+from django.core.mail import send_mail
+from django.conf import settings
 
 from rest_framework import status
 from rest_framework.views import APIView
@@ -11,8 +13,7 @@ from .serializers import *
 from .models import *
 
 from accounts.models import *
-
-
+from options.models import *
 
 
 # CRUD User Model
@@ -106,7 +107,6 @@ class DeleteUserAPIView(APIView):
         return Response({'Message':'User Deleted...'},status=status.HTTP_200_OK)
 
 
-
 # CRUD Product Model
 class CreateProductAPIView(APIView):
 
@@ -173,7 +173,6 @@ class DeleteProductAPIView(APIView):
         product = self.product_instance
         product.delete()
         return Response({'Message':'Product Deleted...'},status=status.HTTP_200_OK)
-
 
 
 # CRUD GaleryProduct Model
@@ -249,6 +248,59 @@ class DeleteGaleryProductAPIView(APIView):
         return Response({'Message':'Galery Deleted...'},status=status.HTTP_200_OK)
 
 
+# Reply comment and get all comments
+class CommentsAPIView(APIView):
+
+    """
+        get all comments
+    """
+
+    permission_classes = [IsAdmin]
+    serializer_class = CommentsSerializer
+
+    def setup(self, request, *args, **kwargs) :
+        self.comment_instance = CommentProduct.objects.all()
+        return super().setup(request, *args, **kwargs)
+    
+    def get(self , request , *args , **kwargs):
+        comments = self.comment_instance
+        serializer = self.serializer_class(instance = comments , many = True)
+        return Response(data = serializer.data , status = status.HTTP_200_OK)
+
+class ReplyCommentProductAPIView(APIView):
+    """
+        reply comment products
+        Note:
+
+            The user must be logged in and is_admin must be active.
+    """
+
+    permission_classes = [IsAdmin]
+    serializer_class = ReplyCommentProductSerializer
+
+    def setup(self, request, *args, **kwargs) :
+        self.product_instance = Product.objects.get(id = kwargs['product_id'])
+        self.comment_instance = CommentProduct.objects.get(id = kwargs['comment_id'])
+        return super().setup(request, *args, **kwargs)
+
+    def post(self , request , *args , **kwargs):
+        serializer = self.serializer_class(data = request.data)
+        
+        if serializer.is_valid():
+            vd = serializer.validated_data
+            if request.user.is_admin:
+                CommentProduct.objects.create(
+                    user = request.user,
+                    product = self.product_instance,
+                    reply = self.comment_instance,
+                    is_reply = True,
+                    message = vd['message']
+                )
+                return Response(data = serializer.data ,status=status.HTTP_200_OK)
+            else:
+                return Response({'message':'you not admin'})
+        return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+
 
 # CRUD Blog Model
 class CreateBlogAPIView(APIView):
@@ -316,8 +368,8 @@ class DeleteBlogAPIView(APIView):
         blog.delete()
         return Response({'Message':'Blog Deleted...'},status=status.HTTP_200_OK)
     
+    
 # CRUD Tag Model
-
 class TagsAPIView(APIView):
     """
         get all Tags
@@ -339,7 +391,6 @@ class TagsAPIView(APIView):
         serializer = self.serializer_class(instance = tags , many = True)
         return Response(data = serializer.data , status=status.HTTP_200_OK)
 
-
 class CreateTagAPIView(APIView):
 
     """
@@ -359,7 +410,6 @@ class CreateTagAPIView(APIView):
             return Response(data = serializer.data ,status=status.HTTP_200_OK)
         return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
     
-
 class RetrieveTagAPIView(APIView):
 
     """
@@ -381,7 +431,6 @@ class RetrieveTagAPIView(APIView):
         serializer = self.serializer_class(instance = tag)
         return Response(data = serializer.data , status=status.HTTP_200_OK)
     
-
 class UpdateTagAPIView(APIView):
 
     """
@@ -407,7 +456,6 @@ class UpdateTagAPIView(APIView):
             return Response(data = serializer.data ,status=status.HTTP_200_OK)
         return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
     
-
 class DeleteTagAPIView(APIView):
 
     """
@@ -427,3 +475,73 @@ class DeleteTagAPIView(APIView):
         tag = self.tag_instance 
         tag.delete()
         return Response({'Message':'Tag Deleted...'},status=status.HTTP_200_OK)
+    
+
+# Reply Contacts
+class ContactMessagesAPIView(APIView):
+    """
+        get all contact us messages
+
+        Note:
+
+            The user must be logged in and is_admin must be active. 
+    """
+
+    serializer_class = MessageContactSerializer
+    permission_classes = [IsAdmin]
+    
+    def setup(self, request, *args, **kwargs) :
+        self.contact_instance = ContactUs.objects.all()
+        return super().setup(request, *args, **kwargs)
+    
+    def get(self , request):
+        messages = self.contact_instance
+        serializer = self.serializer_class(instance = messages , many = True)
+        return Response(data = serializer.data , status=status.HTTP_200_OK)
+    
+class ReplyContactAPIView(APIView):
+
+    """
+        Reply Contacts
+        Note:
+
+            The user must be logged in and is_admin must be active.
+    """
+
+    permission_classes = [IsAdmin]
+    serializer_class = ReplyContactSerializer
+
+    def setup(self, request, *args, **kwargs) :
+        self.contact_instance = ContactUs.objects.get(id = kwargs['contact_id'])
+        return super().setup(request, *args, **kwargs)
+
+    def post(self , request , *args , **kwargs):
+        serializer = self.serializer_class(data = request.data)
+        contact = self.contact_instance
+
+        if serializer.is_valid():
+            from_email = settings.EMAIL_HOST_USER
+            vd = serializer.validated_data
+            reply = ReplyContact.objects.create(
+                user = request.user,
+                contact = contact,
+                message = vd['message']
+            )
+            # reply email...
+            msg = "you recieved an email from {0} \n related to : {1} \n message : {2}".format(
+                from_email,
+                reply.contact.subject,
+                vd['message'],
+            )
+            send_mail(
+                reply.contact.subject,
+                message=msg,
+                from_email=from_email,
+                recipient_list=[reply.contact.email],
+                fail_silently=False
+            )
+            contact.is_reply = True
+            contact.save()
+            return Response(data = serializer.data ,status=status.HTTP_200_OK)
+        return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+

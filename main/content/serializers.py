@@ -3,8 +3,7 @@ from rest_framework import serializers
 from .models import *
 
 # import modules app options
-from options.models import Blog
-
+from options.models import Blog , CommentProduct
 
 class CategorysSerializer(serializers.ModelSerializer):
     

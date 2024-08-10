@@ -3,11 +3,11 @@ from rest_framework import serializers
 from .models import *
 
 from accounts.models import User
-from options.models import Blog , Tag
-from content.models import Product , GaleryProduct
+from options.models import *
+from content.models import *
 
 
-
+# User Serializers
 class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -20,7 +20,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('phone','username','is_active','is_admin')
 
-
+# Product Serializers
 class GaleryProductSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -33,14 +33,24 @@ class UpdateGaleryProductSerializer(serializers.ModelSerializer):
         model = GaleryProduct
         fields = '__all__'
 
-
 class ProductSerializer(serializers.ModelSerializer):  
  
     class Meta:
         model = Product 
         fields = ('__all__')
 
+class CommentsSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(read_only = True)
+    class Meta:
+        model = CommentProduct
+        fields = ('__all__')
 
+class ReplyCommentProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CommentProduct
+        fields = ('message',)
+
+# Blogs serializers
 class BlogSerializer(serializers.ModelSerializer):  
  
     class Meta:
@@ -51,6 +61,17 @@ class TagSerializer(serializers.ModelSerializer):
  
     class Meta:
         model = Tag 
+        fields = ('__all__')
+
+# Reply Contacts Serializer
+class ReplyContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReplyContact
+        fields = ('message',)
+
+class MessageContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactUs
         fields = ('__all__')
 
 

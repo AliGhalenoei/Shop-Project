@@ -235,6 +235,15 @@ AWS_STORAGE_BUCKET_NAME = 'project-shop-api'
 AWS_SERVICE_NAME = 's3'
 AWS_S3_FILE_OVERWRITE = False
 
+# Gmail...
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = '' # email
+EMAIL_PORT = 587
+EMAIL_HOST_PASSWORD = '' # App Password
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL='Website Wiko' #Optional
+
 # Custom User...
 AUTH_USER_MODEL = 'accounts.User'
 
