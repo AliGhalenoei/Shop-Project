@@ -32,6 +32,17 @@ urlpatterns = [
     # reply contacts
     path('contact/messages/',views.ContactMessagesAPIView.as_view(),name='contact_messages'),
     path('reply/contact/<int:contact_id>/',views.ReplyContactAPIView.as_view(),name='reply_contact'),
-    
+    # CRUD Category Model
+    path('add/category/',views.AddCategoryAPIView.as_view(),name = 'add_category'),
+    path('update/category/<int:category_id>/',views.UpdateCategoryAPIView.as_view(),name='update_category'),
+    path('delete/category/<int:category_id>/',views.DelteCategoryAPIView.as_view(),name='delete_category'),
+    # CUD Sub_Category Model
+    path('add/sub/category/',views.AddSubCategoryAPIView.as_view(),name = 'add_subcategory'),
+    path('update/sub/category/<int:sub_id>/',views.UpdateSubCategoryAPIView.as_view(),name='update_subcategory'),
+    path('delete/sub/category/<int:sub_id>/',views.DelteSubCategoryAPIView.as_view(),name='delete_subcategory'),
+    # CD Story Model
+    path('add/story/',views.AddStoryAPIView.as_view(),name = 'add_story'),
+    path('delete/story/<int:story_id>/',views.DeleteStoryAPIView.as_view(),name='delete_story'),
+
 
 ]

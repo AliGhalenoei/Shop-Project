@@ -74,8 +74,39 @@ class MessageContactSerializer(serializers.ModelSerializer):
         model = ContactUs
         fields = ('__all__')
 
+# Add or Update categorys
+class AddCategorySerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Category
+        fields = ('title','baner')
+        extra_kwargs = {'title': {'required': True}} 
 
+class UpdateCategorySerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Category
+        fields = ('title','baner')
+        
+# Add or Update sub_categorys
+class AddSubCategorySerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = SubCategory
+        fields = ('title','baner')
+        extra_kwargs = {'title': {'required': True}} 
 
+class UpdateSubCategorySerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = SubCategory
+        fields = ('title','baner')
+        
+# add Story 
+class AddStorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Story
+        fields = ('__all__')
 
     
 

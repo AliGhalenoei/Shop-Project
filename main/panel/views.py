@@ -472,11 +472,9 @@ class DeleteTagAPIView(APIView):
         return super().setup(request, *args, **kwargs)
     
     def delete(self , request , *args , **kwargs):
-        tag = self.tag_instance 
-        tag.delete()
+        self.tag_instance.delete()
         return Response({'Message':'Tag Deleted...'},status=status.HTTP_200_OK)
     
-
 # Reply Contacts
 class ContactMessagesAPIView(APIView):
     """
@@ -544,4 +542,206 @@ class ReplyContactAPIView(APIView):
             contact.save()
             return Response(data = serializer.data ,status=status.HTTP_200_OK)
         return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+
+
+# CUD Category Model
+class AddCategoryAPIView(APIView):
+
+    """
+        add category
+
+        Note:
+
+            The user must be logged in and is_admin must be active. 
+    """
+
+    serializer_class = AddCategorySerializer
+    permission_classes = [IsAdmin]
+
+    def post(self , request):
+        serializer = self.serializer_class(data = request.data)
+
+        if serializer.is_valid():
+            vd = serializer.validated_data
+            Category.objects.create(
+                title = vd['title'],
+                baner = vd['baner'],
+                slug = slugify(vd['title'])
+            )
+            return Response(data = serializer.data ,status=status.HTTP_200_OK)
+        return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+    
+class UpdateCategoryAPIView(APIView):
+
+    """
+        update category
+
+        Note:
+
+            The user must be logged in and is_admin must be active. 
+    """
+
+    serializer_class = UpdateCategorySerializer
+    permission_classes = [IsAdmin]
+
+    def setup(self, request, *args, **kwargs):
+        self.category_instance = Category.objects.get(id=kwargs['category_id'])
+        return super().setup(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        serializer = self.serializer_class(instance=self.category_instance, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            vd = serializer.validated_data
+            
+            # Get title from validated data or fallback to the current title
+            title = vd.get('title', self.category_instance.title)
+            serializer.save(slug=slugify(title))
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class DelteCategoryAPIView(APIView):
+
+    """
+        delete category
+
+        Note:
+
+            The user must be logged in and is_admin must be active. 
+    """
+
+    permission_classes = [IsAdmin]
+
+    def setup(self, request, *args, **kwargs):
+        self.category_instance = Category.objects.get(id=kwargs['category_id'])
+        return super().setup(request, *args, **kwargs)
+    
+    def delete(self , request , *args , **kwargs):
+        self.category_instance.delete()
+        return Response({'Message':'category Deleted...'},status=status.HTTP_200_OK)
+
+
+# CUD Sub_Category Model
+class AddSubCategoryAPIView(APIView):
+
+    """
+        add sub_category
+
+        Note:
+
+            The user must be logged in and is_admin must be active. 
+    """
+
+    serializer_class = AddSubCategorySerializer
+    permission_classes = [IsAdmin]
+
+    def post(self , request):
+        serializer = self.serializer_class(data = request.data)
+
+        if serializer.is_valid():
+            vd = serializer.validated_data
+            SubCategory.objects.create(
+                title = vd['title'],
+                baner = vd['baner'],
+                slug = slugify(vd['title'])
+            )
+            return Response(data = serializer.data ,status=status.HTTP_200_OK)
+        return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+    
+class UpdateSubCategoryAPIView(APIView):
+
+    """
+        update sub_category
+
+        Note:
+
+            The user must be logged in and is_admin must be active. 
+    """
+
+    serializer_class = UpdateSubCategorySerializer
+    permission_classes = [IsAdmin]
+
+    def setup(self, request, *args, **kwargs):
+        self.sub_instance = SubCategory.objects.get(id=kwargs['sub_id'])
+        return super().setup(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        serializer = self.serializer_class(instance=self.sub_instance, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            vd = serializer.validated_data
+            
+            # Get title from validated data or fallback to the current title
+            title = vd.get('title', self.sub_instance.title)
+            serializer.save(slug=slugify(title))
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class DelteSubCategoryAPIView(APIView):
+
+    """
+        delete category
+
+        Note:
+
+            The user must be logged in and is_admin must be active. 
+    """
+
+    permission_classes = [IsAdmin]
+
+    def setup(self, request, *args, **kwargs):
+        self.sub_instance = SubCategory.objects.get(id=kwargs['sub_id'])
+        return super().setup(request, *args, **kwargs)
+    
+    def delete(self , request , *args , **kwargs):
+        self.sub_instance.delete()
+        return Response({'Message':'sub_category Deleted...'},status=status.HTTP_200_OK)
+
+
+# Add or Delete Story Model
+class AddStoryAPIView(APIView):
+
+    """
+        add Story
+
+        Note:
+
+            The user must be logged in and is_admin must be active. 
+    """
+
+    serializer_class = AddStorySerializer
+    permission_classes = [IsAdmin]
+
+    def post(self , request):
+        serializer = self.serializer_class(data = request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data = serializer.data ,status=status.HTTP_200_OK)
+        return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+    
+class DeleteStoryAPIView(APIView):
+
+    """
+        delete story
+        Note:
+
+            The user must be logged in and is_admin must be active.
+    """
+
+    permission_classes = [IsAdmin]
+
+    def setup(self, request, *args, **kwargs) :
+        self.story_instance = Story.objects.get(id = kwargs['story_id'])
+        return super().setup(request, *args, **kwargs)
+    
+    def delete(self , request , *args , **kwargs):
+        self.story_instance.delete()
+        return Response({'Message':'Story Deleted...'},status=status.HTTP_200_OK)
+
+
+
+
 

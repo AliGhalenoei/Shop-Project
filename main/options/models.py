@@ -17,7 +17,7 @@ class Story(models.Model):
     def __str__(self) -> str:
         if self.title:
             return self.title
-        return self.id
+        return str(self.id)
     
 
 class Tag(models.Model):

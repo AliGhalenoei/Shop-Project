@@ -24,7 +24,6 @@ class CategorysAPIView(APIView):
         serializer = self.serializer_class(instance = queryset , many = True)
         return Response(data = serializer.data , status=status.HTTP_200_OK)
 
-
 class SubCategorysAPIView(APIView):
 
     """
@@ -39,7 +38,8 @@ class SubCategorysAPIView(APIView):
         serializer = self.serializer_class(instance = queryset , many = True)
         return Response(data = serializer.data , status=status.HTTP_200_OK , )
     
-    
+
+# Product Model
 class ProductsAPIView(APIView):
 
     """
