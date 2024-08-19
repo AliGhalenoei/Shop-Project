@@ -34,7 +34,7 @@ class Tag(models.Model):
 class Blog(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE,limit_choices_to={'is_admin':True})
     title = models.CharField(max_length=100)
-    content = models.TextField()
+    content = models.TextField(null=True , blank=True)
     image = models.ImageField(upload_to='blog_images/', null=True, blank=True)
     tags = models.ManyToManyField(Tag, related_name='blogs')
     publish_date = models.DateTimeField(auto_now_add=True)
@@ -89,11 +89,11 @@ class ContactUs(models.Model):
     user = models.ForeignKey(User , on_delete=models.CASCADE , related_name='user_contact')
     email =models.EmailField(max_length=255 , null=True , blank=True)
     subject = models.CharField(max_length=255 , choices=SUBJECT)
-    message = models.TextField()
+    message = models.TextField(null=True , blank=True)
     is_reply = models.BooleanField(default=False)
 
     def __str__(self) -> str:
-        return self.message
+        return self.user.username
 
 class ReplyContact(models.Model):
     user = models.ForeignKey(

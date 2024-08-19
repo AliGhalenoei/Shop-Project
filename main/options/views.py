@@ -143,16 +143,16 @@ class ContactUsAPIView(APIView):
             vd = serializer.validated_data
             ContactUs.objects.create(
                 user = request.user,
-                email = vd['email'],
-                subject = vd['subject'],
-                message = vd['message']
+                email = vd.get('email'),
+                subject = vd.get('subject'),
+                message = vd.get('message')
             )
             
             # send email 
             msg = "you recieved an email from {0} \n related to : {1} \n message : {2}".format(
                 vd['email'],
                 vd['subject'],
-                vd['message']
+                vd.get('message')
             )
             send_mail(
                 subject=vd['subject'],

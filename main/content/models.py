@@ -46,7 +46,7 @@ class Product(models.Model):
     title = models.CharField(max_length = 255)
     category = models.ForeignKey(Category,on_delete=models.CASCADE,related_name='product_category',null=True , blank=True)
     sub_category= models.ForeignKey(SubCategory,on_delete=models.CASCADE,related_name='sub_category',null=True , blank=True)
-    body = models.TextField()
+    body = models.TextField(null=True , blank=True)
     baner = models.ImageField(upload_to='baner_products/')
     price = models.IntegerField()
     status = models.CharField(max_length=12 , choices=STATUS_PRODUCT , default='definite')

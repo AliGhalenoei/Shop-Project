@@ -46,4 +46,5 @@ class BlogsSerializer(serializers.ModelSerializer):
         fields = ('__all__')
 
     
-
+class AddCartSerializer(serializers.Serializer):
+    quantity = serializers.IntegerField()

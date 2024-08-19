@@ -5,11 +5,12 @@ from rest_framework.permissions import IsAuthenticated , AllowAny
 
 from .serializers import *
 from .models import *
+from .cart import Cart
 
 from options.models import CommentProduct
-# Create your views here.
 
 
+# Category and Sub_Category
 class CategorysAPIView(APIView):
 
     """
@@ -38,7 +39,6 @@ class SubCategorysAPIView(APIView):
         serializer = self.serializer_class(instance = queryset , many = True)
         return Response(data = serializer.data , status=status.HTTP_200_OK , )
     
-
 # Product Model
 class ProductsAPIView(APIView):
 
@@ -54,7 +54,6 @@ class ProductsAPIView(APIView):
         serializer = self.serializer_class(instance = queryset , many = True)
         return Response(data = serializer.data , status=status.HTTP_200_OK)
     
-
 class OfferProductsAPIView(APIView):
 
     """
@@ -69,7 +68,6 @@ class OfferProductsAPIView(APIView):
         serializer = self.serializer_class(instance = queryset , many = True)
         return Response(data = serializer.data , status=status.HTTP_200_OK)
     
-
 class RetrieveProductAPIView(APIView):
 
     """
@@ -84,7 +82,6 @@ class RetrieveProductAPIView(APIView):
         serializer = self.serializer_class(instance = queryset)
         return Response(data = serializer.data , status=status.HTTP_200_OK)
     
-
 class FilterProductsByCategoryAPIView(APIView):
 
     """
@@ -104,7 +101,6 @@ class FilterProductsByCategoryAPIView(APIView):
         serializer = self.serializer_class(instance = products , many=True)
         return Response(data = serializer.data , status = status.HTTP_200_OK)
     
-
 class FilterProductsBySubCategoryAPIView(APIView):
 
     """
@@ -123,7 +119,6 @@ class FilterProductsBySubCategoryAPIView(APIView):
         products = self.product_instance
         serializer = self.serializer_class(instance = products , many=True)
         return Response(data = serializer.data , status = status.HTTP_200_OK)
-
 
 class RelatedProductAPIView(APIView):
     
@@ -168,7 +163,7 @@ class BlogsAPIView(APIView):
 class RetrieveBlogAPIView(APIView):
 
     """
-        get retrieve Blogs
+        retrieve Blogs
     """
 
     permission_classes = [AllowAny]
@@ -182,3 +177,85 @@ class RetrieveBlogAPIView(APIView):
         blog = self.blog_instance
         serializer = self.serializer_class(instance = blog)
         return Response(data = serializer.data , status = status.HTTP_200_OK)
+
+
+# Cart
+class CartAPIView(APIView):
+    """
+        Getting the users shopping cart
+    """
+
+    permission_classes = [AllowAny]
+
+    def get(self, request, format=None):
+        cart = Cart(request)
+
+        return Response(
+            {"cart": list(cart.__iter__()), 
+            "cart_total_price": cart.get_total_price()},
+            status=status.HTTP_200_OK
+            )
+    
+class AddCartAPIView(APIView):
+
+    """
+            Adding a product to the shopping cart.
+
+            Note: 
+            
+                If the product is already in the cart, it will increase the quantity.
+    """
+
+    permission_classes = [AllowAny]
+    serializer_class = AddCartSerializer
+
+    def post(self , request , product_id):
+        product = Product.objects.get(id = product_id)
+        cart = Cart(request)
+        serializer = self.serializer_class(data = request.data)
+
+        if serializer.is_valid():
+            vd = serializer.validated_data
+            cart.add_cart(product , vd['quantity'])
+            return Response({
+                'message':'add to cart successfuly',
+                'cart':list(cart.__iter__()),
+                "cart_total_price": cart.get_total_price()} ,
+                status=status.HTTP_200_OK
+                )
+        return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+    
+class RemoveCartAPIView(APIView):
+
+    """
+            Remove the product from the shopping cart.
+
+            Note: 
+
+                If the quantity of the products is more than 1, only the quantity will be decreased.
+    """
+
+    permission_classes = [AllowAny]
+
+    def post(self , request , product_id):
+        product = Product.objects.get(id = product_id)
+        cart = Cart(request)
+        cart.remove_cart(product)
+        return Response({
+                'cart':list(cart.__iter__()),
+                "cart_total_price": cart.get_total_price()} ,
+                status=status.HTTP_200_OK
+                )
+
+class ClearCartAPIView(APIView):
+
+    """
+        Remove the entire shopping cart. 
+    """
+
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        cart = Cart(request)
+        cart.clear_cart()
+        return Response({'message':'clear cart successfuly'} , status=status.HTTP_200_OK)

@@ -39,7 +39,7 @@ class ContactUsSerializer(serializers.Serializer):
 
     email = serializers.EmailField(required = True)
     subject = serializers.ChoiceField(choices=SUBJECT)
-    message = serializers.CharField()
+    message = serializers.CharField(required=False)
 
 
 
