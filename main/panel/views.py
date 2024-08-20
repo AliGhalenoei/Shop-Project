@@ -64,9 +64,7 @@ class UpdateUserAPIView(APIView):
 
     """
         Update information users
-        Note:
-
-            The user must be logged in and is_admin must be active.
+        
     """
 
     serializer_class = UserSerializer
