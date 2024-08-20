@@ -70,7 +70,7 @@ class UpdateUserAPIView(APIView):
     """
 
     serializer_class = UserSerializer
-    permission_classes = [IsAdmin]
+    permission_classes = [IsAuthenticated]
 
     def setup(self, request, *args, **kwargs) :
         self.user_instance = User.objects.get(id = kwargs['user_id'])
