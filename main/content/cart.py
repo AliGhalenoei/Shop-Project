@@ -38,7 +38,7 @@ class Cart:
         """
         return sum(int(item["price"] ) * item["quantity"] for item in self.cart.values())
 
-    def add_cart(self , product , quantity):
+    def add_cart(self , product ):
 
         """
             Adding a product to the shopping cart.
@@ -50,7 +50,7 @@ class Cart:
 
         if product_id not in self.cart:
             self.cart[product_id] = {'quantity' : 0 ,'price':str(product.price)}
-        self.cart[product_id]['quantity'] += quantity
+        self.cart[product_id]['quantity'] += 1
         self.save()
 
     def remove_cart(self , product):

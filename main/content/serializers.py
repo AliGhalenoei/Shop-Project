@@ -3,6 +3,7 @@ from rest_framework import serializers
 from .models import *
 
 # import modules app options
+from panel.models import MenuNavbar
 from options.models import Blog , CommentProduct
 
 class CategorysSerializer(serializers.ModelSerializer):
@@ -48,3 +49,9 @@ class BlogsSerializer(serializers.ModelSerializer):
     
 class AddCartSerializer(serializers.Serializer):
     quantity = serializers.IntegerField()
+
+
+class MenuItemSerializer(serializers.Serializer):
+    class Meta:
+        model = MenuNavbar
+        fields = ('__all__')

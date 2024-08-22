@@ -51,6 +51,7 @@ class Product(models.Model):
     price = models.IntegerField()
     status = models.CharField(max_length=12 , choices=STATUS_PRODUCT , default='definite')
     is_avalable=models.BooleanField(default=True)
+    view_by = models.IntegerField(default=0)
 
     slug = models.SlugField(max_length=50, unique=True)
     created = models.DateTimeField(auto_now_add=True)

@@ -740,6 +740,70 @@ class DeleteStoryAPIView(APIView):
         return Response({'Message':'Story Deleted...'},status=status.HTTP_200_OK)
 
 
+# CUD Menu Navbar
+class AddMenusAPIView(APIView):
 
+    """
+        add Menu to navbar
+
+        Note:
+
+            The user must be logged in and is_admin must be active. 
+    """
+
+    serializer_class = MenuNavbarSerializer
+    permission_classes = [IsAdmin]
+
+    def post(self , request):
+        serializer = self.serializer_class(data = request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data = serializer.data ,status=status.HTTP_200_OK)
+        return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+
+class UpdateMenusAPIView(APIView):
+
+    """
+        update Menus
+
+        Note:
+
+            The user must be logged in and is_admin must be active. 
+    """
+
+    serializer_class = MenuNavbarSerializer
+    permission_classes = [IsAdmin]
+
+    def setup(self, request, *args, **kwargs):
+        self.menu_instance = MenuNavbar.objects.get(id=kwargs['menu_id'])
+        return super().setup(request, *args, **kwargs)
+    
+    def put(self , request , *args , **kwargs):
+        serializer = self.serializer_class(instance = self.menu_instance , data = request.data , partial = True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data = serializer.data ,status=status.HTTP_200_OK)
+        return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+    
+class DeleteMenusAPIView(APIView):
+
+    """
+        delete menu
+        Note:
+
+            The user must be logged in and is_admin must be active.
+    """
+
+    permission_classes = [IsAdmin]
+
+    def setup(self, request, *args, **kwargs) :
+        self.menu_instance = MenuNavbar.objects.get(id = kwargs['menu_id'])
+        return super().setup(request, *args, **kwargs)
+    
+    def delete(self , request , *args , **kwargs):
+        self.menu_instance.delete()
+        return Response({'Message':'Menu Deleted...'},status=status.HTTP_200_OK)
 
 

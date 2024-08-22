@@ -43,6 +43,10 @@ urlpatterns = [
     # CD Story Model
     path('add/story/',views.AddStoryAPIView.as_view(),name = 'add_story'),
     path('delete/story/<int:story_id>/',views.DeleteStoryAPIView.as_view(),name='delete_story'),
+    # CUD MenuNavbar Model
+    path('add/menu/',views.AddMenusAPIView.as_view(),name = 'add_menu'),
+    path('update/menu/<int:menu_id>/',views.UpdateMenusAPIView.as_view(),name='update_menu'),
+    path('delete/menu/<int:menu_id>/',views.DeleteMenusAPIView.as_view(),name='delete_menu'),
 
 
 ]

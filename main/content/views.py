@@ -212,18 +212,16 @@ class AddCartAPIView(APIView):
     def post(self , request , product_id):
         product = Product.objects.get(id = product_id)
         cart = Cart(request)
-        serializer = self.serializer_class(data = request.data)
+        # serializer = self.serializer_class(data = request.data)
 
-        if serializer.is_valid():
-            vd = serializer.validated_data
-            cart.add_cart(product , vd['quantity'])
-            return Response({
+        cart.add_cart(product)
+        return Response({
                 'message':'add to cart successfuly',
                 'cart':list(cart.__iter__()),
                 "cart_total_price": cart.get_total_price()} ,
                 status=status.HTTP_200_OK
                 )
-        return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+        # return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
     
 class RemoveCartAPIView(APIView):
 
@@ -259,3 +257,23 @@ class ClearCartAPIView(APIView):
         cart = Cart(request)
         cart.clear_cart()
         return Response({'message':'clear cart successfuly'} , status=status.HTTP_200_OK)
+    
+# Items MennuNavbar Model
+class NavbarItemsAPIView(APIView):
+
+    """
+        get all items Navbar
+    """
+
+    permission_classes = [AllowAny]
+    serializer_class = MenuItemSerializer
+
+    def setup(self, request, *args, **kwargs) :
+        self.menu_instance = MenuNavbar.objects.all()
+        return super().setup(request, *args, **kwargs)
+
+    def get(self , request , *args , **kwargs):
+        menus = self.menu_instance
+        serializer = self.serializer_class(instance = menus , many = True)
+        return Response(data = serializer.data , status = status.HTTP_200_OK)
+

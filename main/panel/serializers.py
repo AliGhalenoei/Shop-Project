@@ -110,6 +110,11 @@ class AddStorySerializer(serializers.ModelSerializer):
         model = Story
         fields = ('__all__')
 
-    
+# Menu Navbar Serializer
+class MenuNavbarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MenuNavbar
+        fields = ('__all__')
+            
 
 

@@ -22,6 +22,7 @@ class Story(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=50)
+    link = models.CharField(max_length=250 , null=True , blank=True)
 
     class Meta:
         verbose_name = "افزودن برچسب "

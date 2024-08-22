@@ -23,4 +23,6 @@ urlpatterns = [
     path('add/cart/<int:product_id>/',views.AddCartAPIView.as_view(),name ='add_cart'),
     path('remove/cart/<int:product_id>/',views.RemoveCartAPIView.as_view(),name ='remove_cart'),
     path('clear/cart/',views.ClearCartAPIView.as_view(),name = 'clear_cart'),
+    # Navbar
+    path('navbar/',views.NavbarItemsAPIView.as_view(),name='navbar'),
 ]
