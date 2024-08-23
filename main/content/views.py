@@ -209,7 +209,7 @@ class AddCartAPIView(APIView):
     permission_classes = [AllowAny]
     serializer_class = AddCartSerializer
 
-    def post(self , request , product_id):
+    def get(self , request , product_id):
         product = Product.objects.get(id = product_id)
         cart = Cart(request)
         # serializer = self.serializer_class(data = request.data)
