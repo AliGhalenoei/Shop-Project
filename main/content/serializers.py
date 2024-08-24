@@ -51,7 +51,7 @@ class AddCartSerializer(serializers.Serializer):
     quantity = serializers.IntegerField()
 
 
-class MenuItemSerializer(serializers.Serializer):
+class MenuItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuNavbar
         fields = ('__all__')
