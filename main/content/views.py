@@ -209,19 +209,21 @@ class AddCartAPIView(APIView):
     permission_classes = [AllowAny]
     serializer_class = AddCartSerializer
 
-    def get(self , request , product_id):
+    def post(self , request , product_id):
         product = Product.objects.get(id = product_id)
         cart = Cart(request)
-        # serializer = self.serializer_class(data = request.data)
-
-        cart.add_cart(product)
-        return Response({
-                'message':'add to cart successfuly',
-                'cart':list(cart.__iter__()),
-                "cart_total_price": cart.get_total_price()} ,
-                status=status.HTTP_200_OK
-                )
-        # return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.serializer_class(data = request.data)
+        
+        if serializer.is_valid():
+            vd = serializer.validated_data
+            cart.add_cart(product , vd['quantity'])
+            return Response({
+                    'message':'add to cart successfuly',
+                    'cart':list(cart.__iter__()),
+                    "cart_total_price": cart.get_total_price()} ,
+                    status=status.HTTP_200_OK
+                    )
+        return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
     
 class RemoveCartAPIView(APIView):
 
