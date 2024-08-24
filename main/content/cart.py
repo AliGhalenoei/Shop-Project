@@ -1,8 +1,9 @@
 from .models import Product
 from .serializers import ProductsSerializer
 
-SESSION_CART_ID = 'cart'
 
+
+SESSION_CART_ID = 'cart'
 class Cart:
 
     def __init__(self , request) -> None:
@@ -12,7 +13,7 @@ class Cart:
         """
         self.session = request.session
         cart = self.session.get(SESSION_CART_ID)
-
+        
         if not cart:
             cart = self.session[SESSION_CART_ID] = {}
         self.cart = cart
@@ -47,10 +48,12 @@ class Cart:
                 If the product is already in the cart, it will increase the quantity.
         """
         product_id = str(product.id)
-
+        print('START CODDING =========>')
         if product_id not in self.cart:
+            print('Entered the bet......... created session')
             self.cart[product_id] = {'quantity' : 0 ,'price':str(product.price)}
         self.cart[product_id]['quantity'] += quantity
+        print(f'END CODE...... {self.cart}')
         self.save()
 
     def remove_cart(self , product):
