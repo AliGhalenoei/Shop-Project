@@ -279,3 +279,23 @@ class NavbarItemsAPIView(APIView):
         serializer = self.serializer_class(instance = menus , many = True)
         return Response(data = serializer.data , status = status.HTTP_200_OK)
 
+
+# Items MennuNavbar Model
+class FAQsAPIView(APIView):
+
+    """
+        get all FAQ
+    """
+
+    permission_classes = [AllowAny]
+    serializer_class = FAQSerializer
+
+    def setup(self, request, *args, **kwargs) :
+        self.faq_instance = FAQ.objects.all()
+        return super().setup(request, *args, **kwargs)
+
+    def get(self , request , *args , **kwargs):
+        faqs = self.faq_instance
+        serializer = self.serializer_class(instance = faqs , many = True)
+        return Response(data = serializer.data , status = status.HTTP_200_OK)
+

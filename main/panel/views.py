@@ -15,6 +15,8 @@ from .models import *
 from accounts.models import *
 from options.models import *
 
+from content.serializers import FAQSerializer
+
 
 # CRUD User Model
 class UsersAPIView(APIView):
@@ -807,3 +809,68 @@ class DeleteMenusAPIView(APIView):
         return Response({'Message':'Menu Deleted...'},status=status.HTTP_200_OK)
 
 
+# CUD FAQ
+class AddFAQ_APIView(APIView):
+
+    """
+        add Faqs
+
+        Note:
+
+            The user must be logged in and is_admin must be active. 
+    """
+
+    serializer_class = FAQSerializer
+    permission_classes = [IsAdmin]
+
+    def post(self , request):
+        serializer = self.serializer_class(data = request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data = serializer.data ,status=status.HTTP_200_OK)
+        return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+
+class UpdateFAQ_APIView(APIView):
+
+    """
+        update faqs
+
+        Note:
+
+            The user must be logged in and is_admin must be active. 
+    """
+
+    serializer_class = FAQSerializer
+    permission_classes = [IsAdmin]
+
+    def setup(self, request, *args, **kwargs):
+        self.faq_instance = FAQ.objects.get(id=kwargs['faq_id'])
+        return super().setup(request, *args, **kwargs)
+    
+    def put(self , request , *args , **kwargs):
+        serializer = self.serializer_class(instance = self.faq_instance , data = request.data , partial = True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data = serializer.data ,status=status.HTTP_200_OK)
+        return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+    
+class DeleteFAQs_APIView(APIView):
+
+    """
+        delete faqs
+        Note:
+
+            The user must be logged in and is_admin must be active.
+    """
+
+    permission_classes = [IsAdmin]
+
+    def setup(self, request, *args, **kwargs) :
+        self.faq_instance = FAQ.objects.get(id = kwargs['faq_id'])
+        return super().setup(request, *args, **kwargs)
+    
+    def delete(self , request , *args , **kwargs):
+        self.faq_instance.delete()
+        return Response({'Message':'FAQ Deleted...'},status=status.HTTP_200_OK)

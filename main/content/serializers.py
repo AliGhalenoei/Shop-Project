@@ -4,13 +4,16 @@ from .models import *
 
 # import modules app options
 from panel.models import MenuNavbar
-from options.models import Blog , CommentProduct
+from options.models import *
+
+
 
 class CategorysSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Category
         fields = ('__all__')
+
 
 class SubCategorysSerializer(serializers.ModelSerializer):
     
@@ -54,4 +57,10 @@ class AddCartSerializer(serializers.Serializer):
 class MenuItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuNavbar
+        fields = ('__all__')
+
+
+class FAQSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FAQ
         fields = ('__all__')

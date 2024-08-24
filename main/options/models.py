@@ -106,5 +106,10 @@ class ReplyContact(models.Model):
     contact = models.ForeignKey(ContactUs , on_delete=models.CASCADE , related_name='contacts')
     message = models.TextField()
 
+class FAQ(models.Model):
+    question = models.CharField(max_length=255)
+    answer = models.TextField()
 
+    def __str__(self) -> str:
+        return self.question
     

@@ -25,4 +25,6 @@ urlpatterns = [
     path('clear/cart/',views.ClearCartAPIView.as_view(),name = 'clear_cart'),
     # Navbar
     path('navbar/',views.NavbarItemsAPIView.as_view(),name='navbar'),
+    # FAQ
+    path('faqs/',views.FAQsAPIView.as_view(),name='faq'),
 ]

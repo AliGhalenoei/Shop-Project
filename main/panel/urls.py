@@ -47,6 +47,9 @@ urlpatterns = [
     path('add/menu/',views.AddMenusAPIView.as_view(),name = 'add_menu'),
     path('update/menu/<int:menu_id>/',views.UpdateMenusAPIView.as_view(),name='update_menu'),
     path('delete/menu/<int:menu_id>/',views.DeleteMenusAPIView.as_view(),name='delete_menu'),
-
+    # CUD FAQ Model
+    path('add/faq/',views.AddFAQ_APIView.as_view(),name = 'add_faq'),
+    path('update/faq/<int:faq_id>/',views.UpdateFAQ_APIView.as_view(),name='update_faq'),
+    path('delete/faq/<int:faq_id>/',views.DeleteFAQs_APIView.as_view(),name='delete_faq'),
 
 ]

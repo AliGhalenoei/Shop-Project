@@ -31,3 +31,8 @@ class ContactUsAdmin(admin.ModelAdmin):
 class ContactUsAdmin(admin.ModelAdmin):
     list_display = ['user'  , 'contact']
 
+@admin.register(FAQ)
+class ContactUsAdmin(admin.ModelAdmin):
+    list_display = ['question']
+
+
