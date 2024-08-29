@@ -299,24 +299,52 @@ class FAQsAPIView(APIView):
         serializer = self.serializer_class(instance = faqs , many = True)
         return Response(data = serializer.data , status = status.HTTP_200_OK)
     
-    
+
 # add view_by product
-class AddViewProductAPIView(APIView):
+# class AddViewProductAPIView(APIView):
     
-    """
-        Recording product views
+#     """
+#         Recording product views
 
-    """
+#     """
 
+#     permission_classes = [AllowAny]
+
+#     def setup(self, request, *args, **kwargs):
+#         self.product_instance = Product.objects.get(id=kwargs['product_id'])
+#         return super().setup(request, *args, **kwargs)
+    
+#     def get(self , request , *args , **kwargs):
+#         self.product_instance.view_by += 1
+#         self.product_instance.save()
+#         return Response({'Message':'view added'} ,status=status.HTTP_200_OK)
+
+from django.shortcuts import get_object_or_404
+
+
+class AddViewProductAPIView(APIView):
+    """
+    Recording product views
+    """
     permission_classes = [AllowAny]
 
     def setup(self, request, *args, **kwargs):
-        self.product_instance = Product.objects.get(id=kwargs['product_id'])
+        self.product_instance = get_object_or_404(Product, id=kwargs['product_id'])
         return super().setup(request, *args, **kwargs)
-    
-    def get(self , request , *args , **kwargs):
-        self.product_instance.view_by += 1
-        self.product_instance.save()
-        return Response({'Message':'view added'} ,status=status.HTTP_200_OK)
 
+    def get(self, request, *args, **kwargs):
+        # Check if the view record exists for this user and product
+        user_ip = request.META.get('REMOTE_ADDR')
+        view_record, created = ProductView.objects.get_or_create(
+            product=self.product_instance,
+            user_ip=user_ip
+        )
 
+        if created:
+            # If a new record was created, increment the view count
+            self.product_instance.view_by += 1
+            self.product_instance.save()
+            return Response({'Message': 'view added'}, status=status.HTTP_200_OK)
+        else:
+            # If the record already exists, do not increment the view count
+            return Response({'Message': 'view already counted'}, status=status.HTTP_400_BAD_REQUEST)

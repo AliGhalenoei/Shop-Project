@@ -70,3 +70,11 @@ class GaleryProduct(models.Model):
     product = models.ForeignKey(Product,on_delete=models.CASCADE,related_name='galery')
     image = models.ImageField(upload_to='galery_products/')
     
+
+class ProductView(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user_ip = models.GenericIPAddressField()
+    viewed_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('product', 'user_ip')
