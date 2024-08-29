@@ -1,6 +1,7 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated , AllowAny
 
 from .serializers import *
@@ -301,30 +302,9 @@ class FAQsAPIView(APIView):
     
 
 # add view_by product
-# class AddViewProductAPIView(APIView):
-    
-#     """
-#         Recording product views
-
-#     """
-
-#     permission_classes = [AllowAny]
-
-#     def setup(self, request, *args, **kwargs):
-#         self.product_instance = Product.objects.get(id=kwargs['product_id'])
-#         return super().setup(request, *args, **kwargs)
-    
-#     def get(self , request , *args , **kwargs):
-#         self.product_instance.view_by += 1
-#         self.product_instance.save()
-#         return Response({'Message':'view added'} ,status=status.HTTP_200_OK)
-
-from django.shortcuts import get_object_or_404
-
-
 class AddViewProductAPIView(APIView):
     """
-    Recording product views
+        Recording product views
     """
     permission_classes = [AllowAny]
 
