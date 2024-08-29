@@ -142,13 +142,16 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# Include setting
-
 
 # corsheaders
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
+SESSION_COOKIE_SAMESITE = 'None' # یا 'Lax' اگر نیاز به cross-site ندارید
+SESSION_COOKIE_SECURE = True # فقط برای اتصال‌های HTTPS
+
+CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SECURE = True # همچنین فقط برای HTTPS
 
 # Rest Framework
 REST_FRAMEWORK = {

@@ -115,6 +115,11 @@ class MenuNavbarSerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuNavbar
         fields = ('__all__')
-            
+
+# View_by products      
+class ViewsProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ('view_by',)
 
 

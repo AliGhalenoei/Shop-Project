@@ -298,4 +298,25 @@ class FAQsAPIView(APIView):
         faqs = self.faq_instance
         serializer = self.serializer_class(instance = faqs , many = True)
         return Response(data = serializer.data , status = status.HTTP_200_OK)
+    
+    
+# add view_by product
+class AddViewProductAPIView(APIView):
+    
+    """
+        Recording product views
+
+    """
+
+    permission_classes = [AllowAny]
+
+    def setup(self, request, *args, **kwargs):
+        self.product_instance = Product.objects.get(id=kwargs['product_id'])
+        return super().setup(request, *args, **kwargs)
+    
+    def get(self , request , *args , **kwargs):
+        self.product_instance.view_by += 1
+        self.product_instance.save()
+        return Response({'Message':'view added'} ,status=status.HTTP_200_OK)
+
 

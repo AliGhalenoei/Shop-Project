@@ -27,4 +27,6 @@ urlpatterns = [
     path('navbar/',views.NavbarItemsAPIView.as_view(),name='navbar'),
     # FAQ
     path('faqs/',views.FAQsAPIView.as_view(),name='faq'),
+    # add view_by product
+    path('add/view/<int:product_id>/',views.AddViewProductAPIView.as_view(),name='add_view'),
 ]

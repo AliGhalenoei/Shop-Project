@@ -51,5 +51,9 @@ urlpatterns = [
     path('add/faq/',views.AddFAQ_APIView.as_view(),name = 'add_faq'),
     path('update/faq/<int:faq_id>/',views.UpdateFAQ_APIView.as_view(),name='update_faq'),
     path('delete/faq/<int:faq_id>/',views.DeleteFAQs_APIView.as_view(),name='delete_faq'),
+    # Show View_by Products
+    path('view/products/',views.ViewProductsAPIView.as_view(),name='view_products'),
+    
+
 
 ]

@@ -874,3 +874,27 @@ class DeleteFAQs_APIView(APIView):
     def delete(self , request , *args , **kwargs):
         self.faq_instance.delete()
         return Response({'Message':'FAQ Deleted...'},status=status.HTTP_200_OK)
+
+
+# View By Products
+class ViewProductsAPIView(APIView):
+
+    """
+        Show all view products
+
+        Note:
+
+            The user must be logged in and is_admin must be active. 
+    """
+
+    serializer_class = ViewsProductSerializer
+    permission_classes = [IsAdmin]
+
+    def get(self , request):
+        views = Product.objects.all().order_by('-view_by')
+        serializer = self.serializer_class(instance=views , many = True)
+        return Response(data = serializer.data ,status=status.HTTP_200_OK)
+
+        
+            
+        
