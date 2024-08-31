@@ -17,6 +17,7 @@ from options.models import *
 
 from content.serializers import FAQSerializer
 
+import uuid
 
 # CRUD User Model
 class UsersAPIView(APIView):
@@ -563,10 +564,11 @@ class AddCategoryAPIView(APIView):
 
         if serializer.is_valid():
             vd = serializer.validated_data
+            unique_slug = str(uuid.uuid4())
             Category.objects.create(
                 title = vd['title'],
                 baner = vd['baner'],
-                slug = slugify(vd['title'])
+                slug = unique_slug
             )
             return Response(data = serializer.data ,status=status.HTTP_200_OK)
         return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
@@ -641,10 +643,11 @@ class AddSubCategoryAPIView(APIView):
 
         if serializer.is_valid():
             vd = serializer.validated_data
+            uniqied_slug = str(uuid.uuid4())
             SubCategory.objects.create(
                 title = vd['title'],
                 baner = vd['baner'],
-                slug = slugify(vd['title'])
+                slug = uniqied_slug
             )
             return Response(data = serializer.data ,status=status.HTTP_200_OK)
         return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
