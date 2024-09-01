@@ -21,14 +21,14 @@ class BlogAdmin(admin.ModelAdmin):
 
 @admin.register(CommentProduct)
 class CommentProductAdmin(admin.ModelAdmin):
-    list_display = ['user' , 'product' , 'message'  , 'is_reply' , 'id']
+    list_display = ['user' , 'product' , 'message'  , 'is_reply' , 'reply_complete' , 'id']
 
 @admin.register(ContactUs)
 class ContactUsAdmin(admin.ModelAdmin):
     list_display = ['user' , 'email' , 'subject' , 'is_reply' , 'id']
 
 @admin.register(ReplyContact)
-class ContactUsAdmin(admin.ModelAdmin):
+class ReplyContactUsAdmin(admin.ModelAdmin):
     list_display = ['user'  , 'contact']
 
 @admin.register(FAQ)

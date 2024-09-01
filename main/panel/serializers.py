@@ -41,6 +41,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class CommentsSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only = True)
+    product = serializers.StringRelatedField(read_only = True)
     class Meta:
         model = CommentProduct
         fields = ('__all__')

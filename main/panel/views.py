@@ -297,6 +297,8 @@ class ReplyCommentProductAPIView(APIView):
                     is_reply = True,
                     message = vd['message']
                 )
+                self.comment_instance.reply_complete = True
+                self.comment_instance.save()
                 return Response(data = serializer.data ,status=status.HTTP_200_OK)
             else:
                 return Response({'message':'you not admin'})
@@ -381,7 +383,7 @@ class TagsAPIView(APIView):
     """
 
     serializer_class = TagSerializer
-    permission_classes = [IsAdmin]
+    permission_classes = [AllowAny]
     
     def setup(self, request, *args, **kwargs) :
         self.tag_instance = Tag.objects.all()

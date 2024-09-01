@@ -61,6 +61,7 @@ class CommentProduct(models.Model):
         blank=True
     )
     is_reply = models.BooleanField(default=False)
+    reply_complete = models.BooleanField(default=False)
     message = models.TextField()
 
     created = models.DateTimeField(auto_now_add=True)
