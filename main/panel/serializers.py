@@ -41,10 +41,17 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class CommentsSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only = True)
-    product = serializers.StringRelatedField(read_only = True)
+    product = serializers.SerializerMethodField()
+
     class Meta:
         model = CommentProduct
         fields = ('__all__')
+
+    def get_product(self , obj):
+        return{
+            'id':obj.product.id,
+            'title':obj.product.title
+        }
 
 class ReplyCommentProductSerializer(serializers.ModelSerializer):
     class Meta:
