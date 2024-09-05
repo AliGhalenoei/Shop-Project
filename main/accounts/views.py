@@ -97,6 +97,7 @@ class UserRegisterAPIView(APIView):
                 'username':user.username,
                 'password':user.phone,
                 'role':user.is_admin,
+                'user_id':user.id,
                 'access':str(refresh.access_token),
                 'refresh':str(refresh)
             } , status=status.HTTP_201_CREATED)
