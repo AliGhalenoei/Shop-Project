@@ -45,7 +45,9 @@ class UserRegisterSerializer(serializers.Serializer):
 
     def validate_phone(self , value):
         if User.objects.filter(phone = value).exists():
-            raise serializers.ValidationError('Phone is already exist!!!')
+            raise serializers.ValidationError('The phone number was already exist!!!')
+        elif len(value) > 11:
+            raise serializers.ValidationError('The phone number is invalid')
         return value
     
     def validate_username(self , value):
