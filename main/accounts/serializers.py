@@ -48,6 +48,8 @@ class UserRegisterSerializer(serializers.Serializer):
             raise serializers.ValidationError('The phone number was already exist!!!')
         elif len(value) != 11:
             raise serializers.ValidationError('The phone number is invalid')
+        elif not value.startswith('09'):
+            raise serializers.ValidationError('number phone invalid!!! 09...')
         return value
     
     def validate_username(self , value):
