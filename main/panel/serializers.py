@@ -37,7 +37,7 @@ class ProductSerializer(serializers.ModelSerializer):
  
     class Meta:
         model = Product 
-        fields = ('title','body','baner','price','category','sub_category')
+        exclude = ('slug',)
 
 class CommentsSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only = True)

@@ -126,7 +126,7 @@ class CreateProductAPIView(APIView):
 
         if serializer.is_valid():
             uniqied_slug = str(uuid.uuid4())
-            serializer.save(slug=uniqied_slug)
+            serializer.save(slug=uniqied_slug,is_avalable=True)
             return Response(data = serializer.data ,status=status.HTTP_200_OK)
         return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
     
