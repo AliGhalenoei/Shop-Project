@@ -676,10 +676,8 @@ class UpdateSubCategoryAPIView(APIView):
 
         if serializer.is_valid():
             vd = serializer.validated_data
-            
-            # Get title from validated data or fallback to the current title
-            title = vd.get('title', self.sub_instance.title)
-            serializer.save(slug=slugify(title))
+            required_slug = uuid.uuid4()
+            serializer.save(slug=required_slug)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
